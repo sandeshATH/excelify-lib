@@ -1,0 +1,80 @@
+﻿<div class="container">
+  <div class="upload-section" *ngIf="!hideUpload">
+    <label for="file-upload" class="upload-btn">Upload Excel</label>
+    <input type="file" id="file-upload" accept=".xlsx,.xls,.csv" (change)="onFileChange($event)" hidden />
+    <button class="download-btn" (click)="downloadExcel()" [disabled]="!excelData.length">Download Updated Excel</button>
+  </div>
+
+  <div *ngIf="sheetNames.length > 1" class="sheet-selector">
+    <label for="sheetSelect">Select Sheet:</label>
+    <select id="sheetSelect" (change)="onSheetChange($event)" [value]="selectedSheet">
+      <option *ngFor="let sheet of sheetNames" [value]="sheet">{{ sheet }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="excelData.length > 0" class="excel-wrapper" [ngStyle]="{ width: containerWidth }">
+    <div class="excel-toolbar">
+      <button type="button" class="tlb-btn" title="Bold" (click)="toggleBold()"><strong>B</strong></button>
+      <div class="tlb-sep"></div>
+      <button type="button" class="tlb-btn" title="Align left" (click)="align('left')">L</button>
+      <button type="button" class="tlb-btn" title="Align center" (click)="align('center')">C</button>
+      <button type="button" class="tlb-btn" title="Align right" (click)="align('right')">R</button>
+      <div class="tlb-sep"></div>
+      <button type="button" class="tlb-btn" title="Wrap text" (click)="toggleWrap()">Wrap</button>
+      <div class="tlb-sep"></div>
+      <button type="button" class="tlb-btn" title="AutoSum (Alt+=)" (click)="addSumOverSelection()">Sum</button>
+      <button type="button" class="tlb-btn" title="Average" (click)="addAvgOverSelection()">Avg</button>
+      <button type="button" class="tlb-btn" title="Count" (click)="addCountOverSelection()">Cnt</button>
+      <div class="tlb-grow"></div>
+      <input class="name-box" [value]="nameBox" readonly aria-label="Cell address" />
+      <input class="formula-input" [(ngModel)]="formulaText" (keyup.enter)="applyFormulaBar()" (blur)="applyFormulaBar()" placeholder="fx" aria-label="Formula bar" />
+      <button type="button" class="tlb-btn" title="Find (Ctrl+F)" (click)="openFindPanel()">Find</button>
+      <div class="find-panel" *ngIf="showFind">
+        <input #findInput class="find-input" [(ngModel)]="findQuery" (input)="runFind()" (keyup.enter)="nextFind()" placeholder="Find..." />
+        <input class="replace-input" [(ngModel)]="replaceText" placeholder="Replace with..." />
+        <label class="find-opt"><input type="checkbox" [(ngModel)]="findCaseSensitive" (change)="runFind()" /> Case</label>
+        <span class="find-count">{{ findResults.length ? (currentFindIndex + 1) + '/' + findResults.length : '0/0' }}</span>
+        <button type="button" class="tlb-btn" (click)="prevFind()">Prev</button>
+        <button type="button" class="tlb-btn" (click)="nextFind()">Next</button>
+        <button type="button" class="tlb-btn" (click)="replaceCurrent()" [disabled]="!findQuery">Replace</button>
+        <button type="button" class="tlb-btn" (click)="replaceAllMatches()" [disabled]="!findQuery">Replace All</button>
+        <button type="button" class="tlb-btn" (click)="closeFindPanel()">Close</button>
+      </div>
+    </div>
+    <div class="table-container" [ngStyle]="{ height: containerHeight }">
+      <hot-table #hotRef [hotId]="hotId" class="hot-full"
+        [data]="excelData" [rowHeaders]="true" [colHeaders]="true"
+        [dropdownMenu]="true" [filters]="true" [search]="true"
+        [contextMenu]="contextMenu" [formulas]="formulas" [licenseKey]="licenseKey"
+        [copyPaste]="false"
+        [stretchH]="'all'" [manualColumnResize]="true" [manualRowResize]="true"
+        [manualColumnMove]="true" [manualRowMove]="true" [columnSorting]="true"
+        [fillHandle]="true" [fixedRowsTop]="headerRows" [fixedColumnsLeft]="0"
+        [outsideClickDeselects]="false" [currentRowClassName]="'currentRow'"
+        [currentColClassName]="'currentCol'">
+      </hot-table>
+    </div>
+    <div class="status-bar" aria-live="polite">
+      <ng-container *ngIf="!selectionStats.hasNonNumeric && selectionStats.numericCount > 0; else countOnly">
+        <div class="status-item">
+          <span class="status-label">Average</span>
+          <span class="status-value">{{ selectionStats.average !== null ? (selectionStats.average | number:'1.0-4') : '—' }}</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Count</span>
+          <span class="status-value">{{ selectionStats.count }}</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Sum</span>
+          <span class="status-value">{{ selectionStats.numericCount ? (selectionStats.sum | number:'1.0-4') : '—' }}</span>
+        </div>
+      </ng-container>
+      <ng-template #countOnly>
+        <div class="status-item">
+          <span class="status-label">Count</span>
+          <span class="status-value">{{ selectionStats.count }}</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

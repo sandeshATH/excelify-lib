@@ -1,0 +1,21 @@
+{
+  "name": "@devath/excelify",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^18.0.0",
+    "@angular/core": "^18.0.0",
+    "@angular/forms": "^18.0.0",
+    "@handsontable/angular": "^15.0.0",
+    "handsontable": "^15.0.0",
+    "hyperformula": "^2.0.0",
+    "file-saver": "^2.0.0",
+    "xlsx": "^0.17.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "volta": {
+    "node": "18.20.8"
+  }
+}
