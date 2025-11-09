@@ -1,0 +1,36 @@
+{
+  "name": "excelify-lib",
+  "version": "0.0.0",
+  "description": "Standalone Angular Excelify library workspace",
+  "scripts": {
+    "build": "ng-packagr -p projects/excelify/ng-package.json",
+    "clean": "npx rimraf dist"
+  },
+  "devDependencies": {
+    "@angular/common": "18.2.12",
+    "@angular/compiler": "18.2.12",
+    "@angular/compiler-cli": "18.2.12",
+    "@angular/core": "18.2.12",
+    "@angular/forms": "18.2.12",
+    "@handsontable/angular": "15.3.0",
+    "@types/node": "^18.19.50",
+    "file-saver": "^2.0.5",
+    "handsontable": "15.3.0",
+    "hyperformula": "2.7.1",
+    "ng-packagr": "18.2.0",
+    "rimraf": "^5.0.10",
+    "tslib": "^2.6.2",
+    "typescript": "5.5.4",
+    "xlsx": "^0.17.5"
+  },
+  "peerDependencies": {
+    "@angular/common": "^18.0.0",
+    "@angular/core": "^18.0.0",
+    "@angular/forms": "^18.0.0",
+    "@handsontable/angular": "^15.0.0",
+    "file-saver": "^2.0.0",
+    "handsontable": "^15.0.0",
+    "hyperformula": "^2.0.0",
+    "xlsx": "^0.17.0"
+  }
+}

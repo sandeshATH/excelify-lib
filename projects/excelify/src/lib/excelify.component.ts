@@ -25,7 +25,7 @@ export class ExcelifyComponent implements AfterViewInit {
 
   // HyperFormula engine instance (REQUIRED for formulas)
   private hf = HyperFormula.buildEmpty({ licenseKey: 'gpl-v3' });
-  formulas = { engine: this.hf };
+  formulas: any = { engine: this.hf };
 // @ts-ignore
   // Show insert/delete row/col etc. in context menu
   contextMenu: Handsontable.contextMenu.Settings['items'] | boolean = [
@@ -664,3 +664,4 @@ export class ExcelifyComponent implements AfterViewInit {
     saveAs(blob, 'updated_excel.xlsx');
   }
 }
+
