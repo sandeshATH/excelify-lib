@@ -471,6 +471,7 @@ export class ExcelifyComponent implements AfterViewInit {
     this.currentFindIndex = 0;
     if (this.findResults.length) this.gotoFindIndex(0);
     this.hot.render();
+    this.refocusFindInput();
   }
   clearFind() {
     this.findQuery = '';
@@ -495,6 +496,23 @@ export class ExcelifyComponent implements AfterViewInit {
   nextFind() { this.gotoFindIndex(this.currentFindIndex + 1); }
   prevFind() { this.gotoFindIndex(this.currentFindIndex - 1); }
 
+  
+  private refocusFindInput() {
+    if (!this.showFind) return;
+    setTimeout(() => {
+      const inputEl = this.findInput?.nativeElement;
+      if (!inputEl) return;
+      const cursorPos = inputEl.value?.length ?? 0;
+      inputEl.focus();
+      try {
+        inputEl.setSelectionRange(cursorPos, cursorPos);
+      } catch {
+        // ignore browsers that don't support selection API on input type
+      }
+    }, 0);
+  }
+
+  
   replaceCurrent() {
     if (!this.hot || !this.findQuery) return;
     if (!this.findResults.length) {
