@@ -448,7 +448,7 @@ export class ExcelifyComponent implements AfterViewInit {
   // ===== Find panel logic using Handsontable Search plugin =====
   openFindPanel() {
     this.showFind = true;
-    setTimeout(() => this.findInput?.nativeElement?.focus(), 0);
+    this.focusFindInput();
   }
   closeFindPanel() {
     this.showFind = false;
@@ -456,6 +456,7 @@ export class ExcelifyComponent implements AfterViewInit {
   }
   runFind() {
     if (!this.hot) return;
+    const shouldRefocus = this.isFindInputFocused();
     // Use search plugin
     // @ts-ignore
     const search = this.hot.getPlugin('search');
@@ -469,7 +470,8 @@ export class ExcelifyComponent implements AfterViewInit {
     const results = search.query(query, undefined, (qStr: string, value: any) => cmp(qStr, value)) || [];
     this.findResults = results.map((r: any) => ({ row: r.row, col: r.col }));
     this.currentFindIndex = 0;
-    if (this.findResults.length) this.gotoFindIndex(0);
+    if (this.findResults.length) this.gotoFindIndex(0, shouldRefocus);
+    else if (shouldRefocus) this.focusFindInput();
     this.hot.render();
   }
   clearFind() {
@@ -484,16 +486,27 @@ export class ExcelifyComponent implements AfterViewInit {
       this.hot.render();
     }
   }
-  gotoFindIndex(idx: number) {
+  gotoFindIndex(idx: number, refocus = false) {
     if (!this.hot || !this.findResults.length) return;
+    const hadFindFocus = refocus || this.isFindInputFocused();
     const n = this.findResults.length;
     this.currentFindIndex = ((idx % n) + n) % n; // wrap
     const { row, col } = this.findResults[this.currentFindIndex];
     this.hot.selectCell(row, col, row, col, true, true);
     this.updateSelection(row, col);
+    if (hadFindFocus) this.focusFindInput();
   }
   nextFind() { this.gotoFindIndex(this.currentFindIndex + 1); }
   prevFind() { this.gotoFindIndex(this.currentFindIndex - 1); }
+
+  private isFindInputFocused() {
+    const active = typeof document !== 'undefined' ? document.activeElement : null;
+    return !!(this.findInput?.nativeElement && active === this.findInput.nativeElement);
+  }
+
+  private focusFindInput() {
+    setTimeout(() => this.findInput?.nativeElement?.focus(), 0);
+  }
 
   replaceCurrent() {
     if (!this.hot || !this.findQuery) return;

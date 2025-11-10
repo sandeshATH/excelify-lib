@@ -74,9 +74,11 @@ export declare class ExcelifyComponent implements AfterViewInit {
     closeFindPanel(): void;
     runFind(): void;
     clearFind(): void;
-    gotoFindIndex(idx: number): void;
+    gotoFindIndex(idx: number, refocus?: boolean): void;
     nextFind(): void;
     prevFind(): void;
+    private isFindInputFocused;
+    private focusFindInput;
     replaceCurrent(): void;
     replaceAllMatches(): void;
     private buildReplacement;

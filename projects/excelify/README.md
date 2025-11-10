@@ -13,9 +13,7 @@ Handsontable-powered Excel UI that lets you upload, edit, find/replace, format, 
 ## Installation
 
 ```bash
-npm install @devath/excelify \
-  @handsontable/angular handsontable hyperformula \
-  file-saver xlsx
+npm install @devath/excelify
 ```
 
 > The package lists Angular, Handsontable, HyperFormula, FileSaver, and XLSX as peer dependencies so your app controls versions.
