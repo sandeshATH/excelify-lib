@@ -66,17 +66,6 @@ The component is standalone, so you can also import it directly if you prefer:
 
 ```ts
 import { ExcelifyComponent } from '@devath/excelify';
-```
-
-## Building & Publishing
-
-```bash
-ng build excelify
-cd dist/excelify
-npm publish --access public
-```
-
-Make sure you are logged in to npm (`npm login`) before publishing.
 
 
 
